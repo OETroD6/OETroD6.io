@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forecasting Bike-Share Demand | Chenrui (Avery) Xie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/case-study.css">
+</head>
+<body>
+
+<nav aria-label="Main">
+  <div class="wrap">
+    <a href="index.html" class="logo">Avery Xie</a>
+    <a href="index.html#projects" class="back">← Back to projects</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <header class="top">
+    <span class="hand">business analytics · regression</span>
+    <h1>Forecasting bike-share demand in Seoul</h1>
+    <p class="intro">How many bikes will people rent this hour? I built a linear regression model on two years of Seoul's public bike-share data and turned the results into operating recommendations for a bike-share operator.</p>
+    <ul class="tags">
+      <li>Python</li><li>pandas</li><li>scikit-learn</li><li>Linear Regression</li><li>Cross-validation</li><li>Demand Forecasting</li>
+    </ul>
+    <div class="btns">
+      <a class="btn solid" href="https://archive.ics.uci.edu/dataset/560/seoul+bike+sharing+demand" target="_blank" rel="noopener">Dataset (UCI) ↗</a>
+    </div>
+  </header>
+
+  <!-- EXECUTIVE SUMMARY -->
+  <section class="exec" aria-labelledby="exec-h">
+    <span class="eyebrow" id="exec-h">Executive summary</span>
+    <p class="headline">Demand is highly predictable from time of day, temperature, season and rain — good enough to plan bike redistribution and maintenance, but not to promise exact hourly numbers.</p>
+    <ul>
+      <li>The model explains about <b>two-thirds</b> of the variation in hourly rentals (test R² 0.664).</li>
+      <li>Demand peaks at <b>8am and 6pm</b>; the evening peak is roughly <b>11×</b> busier than the 4–5am low.</li>
+      <li>Winter demand is about <b>a quarter</b> of summer's; every mm of rain costs about <b>65 rentals an hour</b>.</li>
+      <li>Recommendation: schedule redistribution and maintenance around these patterns, and use the model for shift-level planning with a safety buffer at peak times.</li>
+    </ul>
+  </section>
+
+  <div class="kpis">
+    <div class="kpi"><b>0.664</b><span>test R² (share of demand variation explained)</span></div>
+    <div class="kpi"><b>≈11×</b><span>busiest hour vs quietest hour</span></div>
+    <div class="kpi"><b>−357</b><span>fewer rentals/hour in winter vs autumn</span></div>
+    <div class="kpi"><b>±363</b><span>typical error (RMSE), bikes per hour</span></div>
+  </div>
+
+  <!-- ============ PART A: ANALYSIS ============ -->
+  <div class="part"><span class="pill">Part A · The analysis</span></div>
+  <h2>What the data says</h2>
+  <p class="sub">8,760 hourly records → 8,465 after cleaning · target: bikes rented per hour</p>
+
+  <div class="stack">
+    <div class="paper">
+      <h3>Data &amp; preparation</h3>
+      <ul>
+        <li>Source: Seoul Bike Sharing Demand (UCI), hourly city-wide rentals with weather, season and holiday data.</li>
+        <li>Removed 295 hours when the system wasn't operating (rentals were always zero, so they would distort the model).</li>
+        <li>Dropped Dew Point: it was 0.91 correlated with Temperature, which would make the coefficients unreliable.</li>
+      </ul>
+    </div>
+
+    <div class="figs">
+      <figure><span class="tape" aria-hidden="true"></span><img src="images/data-mining/count_by_hour.png" alt="Bar chart of average bikes rented by hour, with peaks at 8am and 6pm"><figcaption>two commuter peaks: 8am &amp; 6pm</figcaption></figure>
+      <figure><span class="tape" aria-hidden="true"></span><img src="images/data-mining/count_by_season.png" alt="Box plot of rented bikes by season, with winter much lower"><figcaption>winter demand drops sharply</figcaption></figure>
+    </div>
+
+    <div class="paper">
+      <h3>Modelling approach</h3>
+      <p>Because demand rises and falls twice a day, a straight line across the hours can't capture it. I compared two linear regression models with 5-fold cross-validation:</p>
+      <table>
+        <thead><tr><th>Model</th><th>How “hour” is used</th><th>Mean CV R²</th></tr></thead>
+        <tbody>
+          <tr><td>Model 1</td><td>As a number (0–23)</td><td class="num">0.536</td></tr>
+          <tr><td>Model 2 ✓</td><td>As 24 categories (one-hot encoded)</td><td class="num">0.655</td></tr>
+        </tbody>
+      </table>
+      <p>Model 2 was chosen. On the held-out 20% test set it scored R² 0.664, very close to its cross-validation score, so it isn't overfitting.</p>
+    </div>
+
+    <div class="figs one">
+      <figure><span class="tape" aria-hidden="true"></span><img src="images/data-mining/model1_vs_model2.png" alt="Line chart of actual vs predicted hourly demand; Model 2 follows the peaks"><figcaption>Model 2 follows the real daily pattern; Model 1 can't</figcaption></figure>
+    </div>
+
+    <div class="paper">
+      <h3>Key drivers (holding other factors constant)</h3>
+      <table>
+        <thead><tr><th>Factor</th><th>Effect on rentals per hour</th></tr></thead>
+        <tbody>
+          <tr><td>Temperature</td><td class="num">+24 per °C</td></tr>
+          <tr><td>Rainfall</td><td class="num">−65 per mm</td></tr>
+          <tr><td>Humidity</td><td class="num">−7 per % point</td></tr>
+          <tr><td>Working day vs holiday</td><td class="num">+124</td></tr>
+          <tr><td>Winter vs autumn</td><td class="num">−357</td></tr>
+          <tr><td>Spring / summer vs autumn</td><td class="num">≈ −157</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="paper">
+      <h3>How accurate is it?</h3>
+      <p>Typical error (RMSE) is 363 bikes per hour — about half of the average hourly demand of 720. Predictions are reasonable for low and medium demand, but the model <b>underestimates the busiest hours</b>, and 145 of 1,693 test predictions were negative, which is impossible for a count.</p>
+    </div>
+    <div class="figs one" style="max-width:520px;margin-left:auto;margin-right:auto">
+      <figure><span class="tape" aria-hidden="true"></span><img src="images/data-mining/actual_vs_pred.png" alt="Scatter plot of actual vs predicted counts on the test set"><figcaption>points below the red line = busy hours underestimated</figcaption></figure>
+    </div>
+  </div>
+
+  <!-- ============ PART B: BUSINESS ============ -->
+  <div class="part biz"><span class="pill">Part B · Business implications</span></div>
+  <h2>What the operator should do</h2>
+  <p class="sub">Turning the findings into decisions for a bike-share operator</p>
+
+  <div class="recs">
+    <div class="rec"><div>
+      <h3>Redistribute bikes before the commuter peaks</h3>
+      <p>Move bikes to commuter areas before 7–8am and 5–6pm, when demand jumps. Use the 4–5am low for overnight rebalancing, when almost no one is riding.</p>
+      <p class="why"><b>Evidence:</b> average demand peaks at about 1,554 bikes/hour at 6pm and falls to about 140 at 4–5am.</p>
+    </div></div>
+
+    <div class="rec"><div>
+      <h3>Plan the fleet and maintenance by season</h3>
+      <p>Schedule major servicing, repairs and bike replacement in winter, and make sure the full fleet is available from spring to autumn.</p>
+      <p class="why"><b>Evidence:</b> median hourly demand is about 203 in winter vs about 906 in summer and 856 in autumn.</p>
+    </div></div>
+
+    <div class="rec"><div>
+      <h3>Adjust daily staffing to the weather forecast</h3>
+      <p>Feed tomorrow's forecast into the model to plan how many redistribution staff and vans are needed. Scale down on rainy or cold days; scale up on warm, dry ones.</p>
+      <p class="why"><b>Evidence:</b> each mm of rain removes about 65 rentals an hour; each extra °C adds about 24.</p>
+    </div></div>
+
+    <div class="rec"><div>
+      <h3>Run lighter operations on public holidays</h3>
+      <p>Holidays lose much of the commuting demand, so fewer rebalancing runs are needed.</p>
+      <p class="why"><b>Evidence:</b> working days have about 124 more rentals per hour than holidays.</p>
+    </div></div>
+  </div>
+
+  <div class="two" style="margin-top:28px">
+    <div class="box y">
+      <h3>How to use the model safely</h3>
+      <ul>
+        <li>Use it for daily and shift-level planning, not exact hourly targets (error ≈ half of average demand).</li>
+        <li>Add a safety buffer at peak times, since busy hours are underestimated.</li>
+        <li>Treat any negative prediction as zero.</li>
+      </ul>
+    </div>
+    <div class="box b">
+      <h3>Next steps to improve it</h3>
+      <ul>
+        <li>Try a log-transformed target or a non-linear model such as a random forest to handle the busiest hours.</li>
+        <li>The data is city-wide; station-level data would be needed to decide <i>where</i> to move bikes.</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="note">All figures come from my analysis of the UCI Seoul Bike Sharing Demand dataset. “≈11×” is 1,554 ÷ 140; “a quarter” compares the winter and summer medians (203 vs 906).</p>
+
+</main>
+
+<footer><a href="index.html#projects">← Back to all projects</a></footer>
+</body>
+</html>

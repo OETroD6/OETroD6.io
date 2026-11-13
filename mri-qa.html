@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MRI ACR QA Pipeline | Chenrui (Avery) Xie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/case-study.css">
+<style>
+  .journey{display:grid;gap:28px;counter-reset:step}
+  .step{display:grid;grid-template-columns:1.3fr 1fr;gap:26px;align-items:center}
+  .step:nth-child(even) figure{order:2}
+  .step .txt::before{counter-increment:step;content:"Step " counter(step);display:block;font-family:var(--hand);font-size:26px;color:var(--blue);line-height:1}
+  .step h3{font-size:22px;margin:4px 0 6px}
+  .step p{font-size:16px;color:var(--muted)}
+  @media (max-width:700px){.step{grid-template-columns:1fr}.step:nth-child(even) figure{order:0}}
+
+  /* architecture diagram */
+  .arch{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;align-items:stretch;gap:10px;position:relative;padding:34px 18px 18px;border:2px dashed var(--ink);border-radius:16px;background:rgba(255,255,255,.6)}
+  .arch .wrapper-label{position:absolute;top:-14px;left:18px;background:var(--bg);padding:0 8px;font-weight:700;font-size:14px}
+  .node{background:#fff;border:2px solid var(--ink);border-radius:12px;padding:14px;box-shadow:3px 3px 0 var(--ink)}
+  .node b{display:block;font-size:16px;margin-bottom:4px}
+  .node small{display:block;font-size:13px;color:var(--muted);line-height:1.45}
+  .node:nth-of-type(1){background:var(--note-b)}
+  .node:nth-of-type(2){background:var(--note-y)}
+  .node:nth-of-type(3){background:var(--note-g)}
+  .node:nth-of-type(4){background:var(--note-p)}
+  .arrow{align-self:center;font-weight:700;font-size:22px}
+  @media (max-width:760px){.arch{grid-template-columns:1fr}.arrow{transform:rotate(90deg);justify-self:center}}
+
+  .mine{border:3px dashed var(--blue);background:#fff;border-radius:14px;padding:24px 26px}
+  .mine h3{font-size:22px}
+</style>
+</head>
+<body>
+
+<nav aria-label="Main">
+  <div class="wrap">
+    <a href="index.html" class="logo">Avery Xie</a>
+    <a href="index.html#projects" class="back">← Back to projects</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <header class="top">
+    <span class="hand">team project · cloud &amp; healthcare software</span>
+    <h1>MRI ACR QA Pipeline</h1>
+    <p class="intro">A cloud-ready web application that automates MRI scanner quality checks. Users upload a ZIP of MRI DICOM scans, the system validates and groups them, runs six ACR phantom QA tests with clear PASS/FAIL results, and produces a downloadable PDF report. Built by a team of four during a placement — <span class="mark">I developed the QA image-processing algorithms</span> and the dashboard pages that present their results.</p>
+    <ul class="tags">
+      <li>Python</li><li>Flask</li><li>pydicom</li><li>NumPy</li><li>JavaScript</li><li>ReportLab</li><li>pytest</li><li>Docker</li><li>AWS EC2</li>
+    </ul>
+    <div class="btns">
+      <a class="btn solid" href="#my-role">My role ↓</a>
+    </div>
+  </header>
+
+  <figure><span class="tape" aria-hidden="true"></span><img src="images/mri/modules-1.png" alt="Module results showing Geometric Accuracy and Slice Thickness checks with PASS and FAIL badges"><figcaption>automated QA results with PASS / FAIL for every check</figcaption></figure>
+
+  <div class="kpis">
+    <div class="kpi"><b>6</b><span>automated ACR QA modules</span></div>
+    <div class="kpi"><b>34</b><span>automated tests passing (pytest)</span></div>
+    <div class="kpi"><b>Docker</b><span>containerised and deployed on AWS EC2</span></div>
+    <div class="kpi"><b>4</b><span>developers, Agile-style with Jira &amp; GitHub</span></div>
+  </div>
+
+  <!-- PROBLEM -->
+  <div class="part"><span class="pill">The problem</span></div>
+  <h2>Why automate MRI quality checks?</h2>
+  <div class="paper" style="margin-top:18px">
+    <p>MRI scanners must produce accurate images, so hospitals regularly scan a standard test object (an ACR “phantom”) and check measurements such as geometry, slice thickness and image uniformity. These checks are often done by hand, which takes time and can give slightly different answers depending on who does them.</p>
+    <p>Our goal was a web tool that runs the same calculations the same way every time, shows the results clearly, and keeps a PDF record for review.</p>
+  </div>
+
+  <!-- JOURNEY -->
+  <div class="part"><span class="pill">What it does</span></div>
+  <h2>From upload to QA report</h2>
+  <p class="sub">The full workflow a physicist or technician would follow.</p>
+
+  <div class="journey">
+    <div class="step">
+      <figure><span class="tape" aria-hidden="true"></span><img src="images/mri/login.png" alt="Login and registration screen for the MRI QA dashboard"></figure>
+      <div class="txt"><h3>Sign in</h3><p>Login, registration and logout with Flask sessions. Dashboard routes are protected, so nobody can open them without signing in.</p></div>
+    </div>
+    <div class="step">
+      <figure><span class="tape" aria-hidden="true"></span><img src="images/mri/dashboard.png" alt="Dashboard after uploading a DICOM ZIP, showing 25 valid MR DICOM files detected"></figure>
+      <div class="txt"><h3>Upload &amp; validate</h3><p>Upload a ZIP of DICOM scans. The backend extracts it, checks the files are valid MRI images and reports what it found (e.g. “25 valid MR DICOM files detected”).</p></div>
+    </div>
+    <div class="step">
+      <figure><span class="tape" aria-hidden="true"></span><img src="images/mri/dataset.png" alt="Dataset overview listing MRI series with slice counts, TR, TE, thickness and gap"></figure>
+      <div class="txt"><h3>Group by metadata</h3><p>Using pydicom, files are automatically sorted into MRI series from their metadata, with slice counts, TR, TE, thickness and gap shown so the user can confirm the upload. Clicking a slice button shows a preview image, so there's no need for a separate DICOM viewer.</p></div>
+    </div>
+    <div class="step">
+      <figure><span class="tape" aria-hidden="true"></span><img src="images/mri/modules-2.png" alt="Slice position, ghosting, uniformity and resolution module results"></figure>
+      <div class="txt"><h3>Run the QA modules</h3><p>Six modules measure the images with NumPy, compare each value against ACR tolerances and explain every PASS or FAIL.</p></div>
+    </div>
+    <div class="step">
+      <figure><span class="tape" aria-hidden="true"></span><img src="images/mri/pdf-report.png" alt="Generated MRI Phantom QA PDF report with dataset overview and module summary"></figure>
+      <div class="txt"><h3>Download the report</h3><p>A PDF report with the dataset overview and a module summary, checked to match exactly what the dashboard shows.</p></div>
+    </div>
+  </div>
+
+  <!-- MODULES -->
+  <div class="paper" style="margin-top:36px">
+    <h3>The six QA modules</h3>
+    <table>
+      <thead><tr><th>Module</th><th>What it checks</th></tr></thead>
+      <tbody>
+        <tr><td>Geometric accuracy</td><td>Measured distances in the image match the phantom's real size</td></tr>
+        <tr><td>Slice thickness</td><td>Each slice is as thick as the scan settings say</td></tr>
+        <tr><td>Slice position</td><td>Slices are where they should be</td></tr>
+        <tr><td>Percent-signal ghosting</td><td>No unwanted “ghost” artefacts</td></tr>
+        <tr><td>Image intensity uniformity</td><td>Brightness is even across the phantom</td></tr>
+        <tr><td>High-contrast spatial resolution</td><td>Fine details are sharp enough to see</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ALGORITHMS -->
+  <div class="part"><span class="pill">Inside the algorithms</span></div>
+  <h2>Turning a manual test into code</h2>
+  <p class="sub">Two examples of the measurement logic I wrote in Python with NumPy.</p>
+
+  <div class="stack">
+    <div class="paper">
+      <h3>Slice thickness</h3>
+      <ol>
+        <li>Find the phantom in the image with an intensity threshold and draw a bounding box around it.</li>
+        <li>Crop the region that contains the two bright slice-thickness “ramps”.</li>
+        <li>For the top and bottom ramp, average several rows into a smoothed intensity profile and measure how long the ramp is in pixels.</li>
+        <li>Convert pixels to millimetres using the DICOM pixel spacing, then apply the ACR formula and compare with the 5 mm target (PASS between 4.3 and 5.7 mm).</li>
+      </ol>
+<pre style="background:#22252a;color:#f3efe6;border-radius:12px;padding:16px 18px;overflow-x:auto;font-size:14px;margin-top:14px"><code>top_mm    = top_len_px * pixel_spacing_mm
+bottom_mm = bottom_len_px * pixel_spacing_mm
+thickness = 0.2 * (top_mm * bottom_mm) / (top_mm + bottom_mm)
+status    = "PASS" if 4.3 &lt;= thickness &lt;= 5.7 else "FAIL"</code></pre>
+    </div>
+    <div class="paper">
+      <h3>Geometric accuracy</h3>
+      <p>The phantom's length is measured on the sagittal localizer and its diameter is measured in several directions (horizontal, vertical and both diagonals) on axial slices. The code first works out which phantom size was scanned from the measured diameter, then checks every measurement against that phantom's known size (e.g. 148 mm long, 190 mm wide, ±3 mm).</p>
+    </div>
+    <div class="paper">
+      <h3>One result format for every module</h3>
+      <p>Every module returns the same structure — module name, measured value, target, PASS/FAIL and a short reason. The dashboard and the PDF report both read this format, so a new module can be added without changing the front-end. The code also saves debug images with the measurement lines drawn on, which made it much easier to check the algorithms visually.</p>
+    </div>
+  </div>
+
+  <!-- ARCHITECTURE -->
+  <div class="part biz"><span class="pill">How it's built</span></div>
+  <h2>Architecture</h2>
+  <p class="sub">QA calculations are kept separate from the dashboard, so each can be tested on its own.</p>
+
+  <div class="arch" role="img" aria-label="Architecture: browser dashboard sends uploads to a Flask backend, which runs QA modules and produces a PDF report, all inside a Docker container on AWS EC2">
+    <span class="wrapper-label">Docker container · AWS EC2</span>
+    <div class="node"><b>Dashboard</b><small>HTML, CSS, JavaScript<br>upload, tables, PASS/FAIL</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="node"><b>Flask backend</b><small>auth &amp; sessions<br>ZIP validation<br>series grouping</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="node"><b>QA modules</b><small>pydicom + NumPy<br>6 ACR checks</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="node"><b>PDF report</b><small>dataset + module summary</small></div>
+  </div>
+
+  <div class="two" style="margin-top:28px">
+    <div class="box g">
+      <h3>Quality &amp; deployment</h3>
+      <ul>
+        <li>34 pytest tests using Flask's test client: login and sessions, protected routes, upload validation, series classification, analysis output and report links.</li>
+        <li>Error cases too: missing file, non-ZIP upload, a ZIP with no real DICOM files, and datasets missing a series (modules return FAIL instead of crashing).</li>
+        <li>End-to-end checks with real MRI phantom datasets.</li>
+        <li>Packaged with Docker for cloud-ready deployment on AWS. Passwords are hashed and unsafe ZIP structures are rejected.</li>
+      </ul>
+    </div>
+    <div class="box y">
+      <h3>How the team worked</h3>
+      <ul>
+        <li>Work split by area: algorithms, backend routes, front-end, testing and deployment.</li>
+        <li>Git branches and reviewed changes to avoid conflicts in a shared codebase.</li>
+        <li>Online team chat plus regular supervisor meetings to plan each stage.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- MY ROLE -->
+  <div class="part" id="my-role"><span class="pill">My role</span></div>
+  <h2>What I worked on</h2>
+  <div class="mine" style="margin-top:18px">
+    <h3>QA algorithms &amp; image processing</h3>
+    <ul>
+      <li>Turned the ACR phantom test procedures into Python modules using pydicom and NumPy — including geometric accuracy and slice thickness, alongside slice position, uniformity, ghosting and resolution.</li>
+      <li>Wrote the DICOM handling the modules rely on: reading metadata (TR, TE, pixel spacing, orientation, instance number) and selecting the correct localizer, T1 and T2 series.</li>
+      <li>Designed the shared result format (measurement, target, PASS/FAIL, reason) that the dashboard and PDF report use.</li>
+    </ul>
+    <h3 style="margin-top:18px">Dashboard &amp; integration</h3>
+    <ul>
+      <li>Built and improved the dashboard pages for upload, dataset overview and QA results.</li>
+      <li>Connected them to the Flask APIs with <code>fetch()</code> (<code>/api/upload</code>, <code>/api/sets</code>, <code>/api/analyze</code>), so results load without a page refresh.</li>
+      <li>Replaced raw JSON with readable result cards, added slice previews, pass/fail counts, and progress and error messages during upload and analysis.</li>
+    </ul>
+  </div>
+
+  <!-- CHALLENGES -->
+  <div class="part"><span class="pill">Challenges</span></div>
+  <h2>Problems we solved</h2>
+  <div class="recs" style="margin-top:18px">
+    <div class="rec"><div>
+      <h3>Measuring the right images</h3>
+      <p>One upload can contain a localizer, a T1 and a T2 series. If the wrong series or slice is used, every measurement is wrong. I used DICOM metadata to classify each series and added a test with mock series to prove the right one is picked.</p>
+    </div></div>
+    <div class="rec"><div>
+      <h3>Bad or incomplete uploads</h3>
+      <p>Uploads were validated early — non-ZIP files, ZIPs without real DICOM data and unsafe ZIP structures are rejected — and a dataset missing a required series returns FAIL results instead of crashing the app.</p>
+    </div></div>
+    <div class="rec"><div>
+      <h3>Making technical results readable</h3>
+      <p>Raw measurement data meant nothing to a user. Showing an overall PASS/FAIL first, then measured vs target values with a short reason, let people spot failed checks at a glance.</p>
+    </div></div>
+  </div>
+
+  <div class="two" style="margin-top:36px">
+    <div class="box y">
+      <h3>What I learned</h3>
+      <ul>
+        <li>Image-processing code needs careful validation — a small mistake in slice selection or pixel spacing changes the final result.</li>
+        <li>A correct algorithm is only useful if its result is presented clearly.</li>
+        <li>Keeping calculation logic separate from display makes a system easier to test and extend.</li>
+      </ul>
+    </div>
+    <div class="box b">
+      <h3>Next steps</h3>
+      <ul>
+        <li>Database storage for users, datasets and report history.</li>
+        <li>Stronger authentication for real clinical use.</li>
+        <li>More QA modules and richer visuals in the PDF report.</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="note">Screenshots use ACR phantom test scans only — no patient data. Developed as a team placement project.</p>
+
+</main>
+
+<footer><a href="index.html#projects">← Back to all projects</a></footer>
+</body>
+</html>

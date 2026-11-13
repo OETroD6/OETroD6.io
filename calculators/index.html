@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Integrated Mini Apps</title>
+    <script>
+        function calculateBMI() {
+            var weight = document.getElementById("weight").value;
+            var height = document.getElementById("height").value;
+            var bmi = weight / ((height / 100) * (height / 100));
+            var resultText = "Your BMI is: " + bmi.toFixed(2) + ". ";
+            var imageElement = document.getElementById("bmiImage"); 
+
+            if (bmi < 18.5) {
+                resultText += "underweight";
+                imageElement.src = "images/underweight.jpg"; 
+                imageElement.style.display = "block"; 
+            } else if (bmi >= 18.5 && bmi <= 23.9) {
+                resultText += "normalweight";
+                imageElement.src = "images/normalweight.jpg"; 
+                imageElement.style.display = "block";
+            } else if (bmi > 23.9) {
+                resultText += "overweight";
+                imageElement.src = "images/overweight.jpg"; 
+                imageElement.style.display = "block"; 
+            }
+
+            document.getElementById("bmiResult").innerHTML = resultText;
+        }
+
+        function calculateLoan() {
+            var principal = document.getElementById("loanAmount").value;
+            var interest = document.getElementById("annualInterest").value / 100 / 12;
+            var payments = document.getElementById("loanTerm").value * 12;
+            var x = Math.pow(1 + interest, payments);
+            var monthly = (principal * x * interest) / (x - 1);
+            document.getElementById("paymentResult").innerHTML = "Monthly payment: " + monthly.toFixed(2);
+        }
+
+        function generateQuestion() {
+            var num1 = Math.floor(Math.random() * 20) + 1;  
+            var num2 = Math.floor(Math.random() * 20) + 1;  
+            var operationIndex = Math.floor(Math.random() * 4); 
+            var question = "";
+            var answer = 0;
+
+            switch (operationIndex) {
+                case 0:
+                    question = `What is ${num1} + ${num2}?`;
+                    correctAnswer = num1 + num2;
+                    break;
+                case 1: 
+                    if (num1 < num2) { [num1, num2] = [num2, num1]; }
+                    question = `What is ${num1} - ${num2}?`;
+                    correctAnswer = num1 - num2;
+                    break;
+                case 2: 
+                    question = `What is ${num1} * ${num2}?`;
+                    correctAnswer = num1 * num2;
+                    break;
+                case 3: 
+                    correctAnswer = num1;
+                    num1 = num1 * num2;
+                    question = `What is ${num1} / ${num2}?`;
+                    break;
+            }
+
+            document.getElementById("question").innerHTML = question;
+            document.getElementById("answer").value = ''; 
+            document.getElementById("quizResult").innerHTML = ''; 
+        }
+
+
+        function checkAnswer() {
+            var userAnswer = document.getElementById("answer").value;
+            if (parseInt(userAnswer) === correctAnswer) {
+                document.getElementById("quizResult").innerHTML = "Correct!";
+            } else {
+                document.getElementById("quizResult").innerHTML = "Incorrect. Please try again.";
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", generateQuestion);
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .app-container {
+            margin-bottom: 40px;
+        }
+
+        label,
+        button,
+        p {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input {
+            margin-bottom: 10px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f1f9;
+            color: #3d3d5c;
+        }
+
+        .app-container {
+            margin-bottom: 40px;
+            border: 2px solid #8a2be2;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #e6e0f8;
+        }
+
+        h2 {
+            color: #8a2be2;
+        }
+
+        label,
+        button,
+        p {
+            display: block;
+            margin-top: 10px;
+            color: #4b0082;
+        }
+
+        input {
+            margin-bottom: 10px;
+            border: 1px solid #8a2be2;
+            border-radius: 4px;
+            padding: 8px;
+        }
+
+        button {
+            background-color: #8a2be2;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #6f22b5;
+        }
+
+        input:focus,
+        button:focus {
+            outline: 2px solid #4b0082;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <h2>BMI Calculator</h2>
+        <label for="weight">Weight (kg):</label>
+        <input type="number" id="weight" required>
+        <label for="height">Height (cm):</label>
+        <input type="number" id="height" required>
+        <button onclick="calculateBMI()">Calculate BMI</button>
+        <p id="bmiResult"></p>
+        <p id="bmiResult"></p>
+        <img id="bmiImage" style="max-width:200px; height:auto; display:none;">
+    </div>
+
+    <div class="app-container">
+        <h2>Loan Repayment Calculator</h2>
+        <label for="loanAmount">Loan Amount:</label>
+        <input type="number" id="loanAmount" required>
+        <label for="annualInterest">Annual Interest Rate (%):</label>
+        <input type="number" id="annualInterest" required>
+        <label for="loanTerm">Loan Term (years):</label>
+        <input type="number" id="loanTerm" required>
+        <button onclick="calculateLoan()">Calculate Payment</button>
+        <p id="paymentResult"></p>
+    </div>
+
+    <div class="app-container">
+        <h2>Math Quiz</h2>
+        <p id="question"></p>
+        <label for="answer">Your Answer:</label>
+        <input type="number" id="answer" required>
+        <button onclick="checkAnswer()">Submit Answer</button>
+        <button onclick="generateQuestion()">Generate New Question</button>
+        <p id="quizResult"></p>
+    </div>
+
+
+
+
+
+</body>
+
+</html>

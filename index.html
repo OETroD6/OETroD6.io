@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chenrui (Avery) Xie | Portfolio</title>
+<meta name="description" content="Digital portfolio of Chenrui (Avery) Xie, final-year Software Design with Artificial Intelligence for Cloud Computing student.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<!--
+  HOW TO EDIT
+  - Hero photo: "Notebook on a desk" by JESHOOTS.COM on Unsplash (free Unsplash License).
+-->
+<style>
+  :root{
+    --bg:#fbf8f1;--ink:#22252a;--muted:#5d6470;--line:#e6dfd0;--blue:#2f5fd0;--hl:#ffe66d;
+    --note-y:#fff3a6;--note-p:#ffd6e0;--note-b:#cfe6ff;--note-g:#d4f0dc;
+    --hand:"Caveat","Comic Sans MS",cursive;--sans:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+  body{font-family:var(--sans);color:var(--ink);font-size:17px;line-height:1.65;background-color:var(--bg);
+    background-image:radial-gradient(#e3dccb 1px,transparent 1px);background-size:22px 22px}
+  a{color:var(--blue)}
+  img{max-width:100%;display:block}
+  :focus-visible{outline:2px dashed var(--blue);outline-offset:3px}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px}
+  .todo{background:#fff1a8;box-shadow:0 0 0 2px #fff1a8;border-radius:2px;color:var(--ink)}
+
+  /* nav */
+  nav{padding:22px 0}
+  nav .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  .logo{font-family:var(--hand);font-size:30px;font-weight:700;color:var(--ink);text-decoration:none}
+  nav ul{list-style:none;display:flex;gap:22px;flex-wrap:wrap}
+  nav ul a{color:var(--muted);text-decoration:none;font-size:15px;font-weight:500}
+  nav ul a:hover{color:var(--ink)}
+
+  /* hero */
+  .hero{padding:44px 0 64px}
+  .hero .wrap{display:grid;grid-template-columns:1.15fr 1fr;gap:56px;align-items:center}
+  .hi{font-family:var(--hand);font-size:30px;color:var(--blue);transform:rotate(-3deg);display:inline-block}
+  .hero h1{font-size:clamp(38px,5.6vw,58px);line-height:1.08;letter-spacing:-.02em;margin:6px 0 18px}
+  .hero h1 small{display:block;font-size:.5em;letter-spacing:0;color:var(--muted);font-weight:500;margin-top:8px}
+  .mark{background:linear-gradient(transparent 58%,var(--hl) 58% 90%,transparent 90%);padding:0 4px}
+  .hero p{color:var(--muted);font-size:18px;max-width:48ch}
+  .btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+  .btn{display:inline-block;padding:11px 20px;border-radius:10px;font-weight:700;font-size:15px;text-decoration:none;border:2px solid var(--ink);color:var(--ink);background:#fff;box-shadow:3px 3px 0 var(--ink);transition:transform .12s,box-shadow .12s}
+  .btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+  .btn.solid{background:var(--blue);color:#fff}
+  .polaroid{background:#fff;padding:14px 14px 50px;box-shadow:0 10px 30px -12px rgba(0,0,0,.25);transform:rotate(2.5deg);position:relative;max-width:400px;justify-self:center}
+  .polaroid img{aspect-ratio:4/3;object-fit:cover;width:100%;background:#e9e3d6}
+  .polaroid figcaption{position:absolute;left:0;right:0;bottom:12px;text-align:center;font-family:var(--hand);font-size:24px;color:var(--muted)}
+  .tape{position:absolute;width:110px;height:28px;background:rgba(255,230,109,.75);top:-12px;left:50%;transform:translateX(-50%) rotate(-4deg)}
+  @media (max-width:760px){.hero .wrap{grid-template-columns:1fr}.polaroid{max-width:320px}}
+
+  /* sections */
+  section.block{padding:60px 0}
+  .title{display:flex;align-items:baseline;gap:14px;margin-bottom:28px;flex-wrap:wrap}
+  .title h2{font-size:32px;letter-spacing:-.01em}
+  .title .note{font-family:var(--hand);font-size:24px;color:var(--blue)}
+  .paper{background:#fff;border:1px solid var(--line);border-radius:14px;padding:32px;box-shadow:0 2px 0 var(--line)}
+
+  /* about */
+  .about{display:grid;grid-template-columns:1.4fr 1fr;gap:40px}
+  .about p+p{margin-top:14px}
+  .facts{list-style:none;font-size:15px}
+  .facts li{padding:10px 0;border-bottom:1px dashed var(--line);display:flex;justify-content:space-between;gap:12px}
+  .facts li span:first-child{color:var(--muted);flex:none}
+  .facts li span:last-child{font-weight:500;text-align:right}
+  @media (max-width:760px){.about{grid-template-columns:1fr}}
+
+  /* skills */
+  .skill-groups{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .skill-groups h3{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:10px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;list-style:none}
+  .chips li{background:#fff;border:2px solid var(--ink);border-radius:999px;padding:4px 13px;font-size:14px;font-weight:500}
+  @media (max-width:760px){.skill-groups{grid-template-columns:1fr}}
+  .notes{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
+  .sticky{padding:22px 20px 26px;box-shadow:0 8px 16px -10px rgba(0,0,0,.3)}
+  .sticky:nth-child(1){background:var(--note-y);transform:rotate(-1.5deg)}
+  .sticky:nth-child(2){background:var(--note-p);transform:rotate(1deg)}
+  .sticky:nth-child(3){background:var(--note-b);transform:rotate(-.5deg)}
+  .sticky h3{font-family:var(--hand);font-size:28px;line-height:1.1;margin-bottom:6px}
+  .sticky p{font-size:15px}
+  @media (max-width:760px){.notes{grid-template-columns:1fr}}
+
+  /* projects */
+  .projects{display:grid;grid-template-columns:repeat(2,1fr);gap:28px}
+  .card{background:#fff;border:2px solid var(--ink);border-radius:12px;overflow:hidden;box-shadow:5px 5px 0 var(--ink);display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s}
+  .card:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}
+  .card .shot{aspect-ratio:16/9;border-bottom:2px solid var(--ink);overflow:hidden;background:#fff}
+  .card .shot img{width:100%;height:100%;object-fit:cover}
+  .card .shot.contain img{object-fit:contain;padding:8px}
+  .card-body{padding:20px 22px 22px;display:flex;flex-direction:column;flex:1}
+  .card .label{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue)}
+  .card h3{font-size:22px;margin:4px 0 8px;line-height:1.25}
+  .card p{font-size:15px;color:var(--muted)}
+  .ctags{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0;list-style:none}
+  .ctags li{font-size:13px;background:var(--bg);border:1px solid var(--line);padding:2px 10px;border-radius:999px}
+  .card .links{margin-top:auto;display:flex;gap:18px;font-weight:700;font-size:15px}
+  /* featured card spans both columns */
+  .card.featured{grid-column:1/-1;flex-direction:row}
+  .card.featured .shot{flex:1.2;aspect-ratio:auto;min-height:300px;border-bottom:0;border-right:2px solid var(--ink)}
+  .card.featured .shot img{object-position:left top}
+  .card.featured .shot.fit{display:flex;align-items:center;background:linear-gradient(135deg,#d9e2fb,#f6f7fd)}
+  .card.featured .shot.fit img{height:auto;object-fit:contain;padding:22px;filter:drop-shadow(0 8px 14px rgba(40,60,120,.12))}
+  .card.featured .card-body{flex:1;padding:26px 28px}
+  .card.featured h3{font-size:28px}
+  @media (max-width:760px){
+    .projects{grid-template-columns:1fr}
+    .card.featured{flex-direction:column}
+    .card.featured .shot{min-height:0;aspect-ratio:16/9;border-right:0;border-bottom:2px solid var(--ink)}
+  }
+
+
+  /* experience */
+  .edu{list-style:none}
+  .edu li{padding:20px 0;border-bottom:1px dashed var(--line);display:grid;grid-template-columns:150px 1fr;gap:20px}
+  .edu li:first-child{padding-top:0}
+  .edu li:last-child{border-bottom:0;padding-bottom:0}
+  .edu .when{color:var(--muted);font-size:14px;padding-top:3px}
+  .edu h3{font-size:19px}
+  .edu p{color:var(--muted);font-size:15px}
+  @media (max-width:760px){.edu li{grid-template-columns:1fr;gap:2px}}
+
+  /* contact */
+  .contact{text-align:center;padding:72px 24px}
+  .contact h2{font-size:clamp(30px,4.5vw,42px);line-height:1.2}
+  .contact .btns{justify-content:center}
+  footer{text-align:center;padding:28px 0 40px;color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+
+<nav aria-label="Main">
+  <div class="wrap">
+    <a href="#top" class="logo">Avery Xie</a>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="top">
+
+  <header class="hero">
+    <div class="wrap">
+      <div>
+        <span class="hi">hi there, I'm</span>
+        <h1>Chenrui <span class="mark">(Avery)</span> Xie<small>Software Design with AI for Cloud Computing · Final year</small></h1>
+        <p>I build software that turns data into decisions — from image-processing algorithms for MRI quality checks to machine-learning models and interactive websites. I'm looking for my first graduate role in tech.</p>
+        <div class="btns">
+          <a class="btn solid" href="#projects">See my projects</a>
+          <a class="btn" href="mailto:OETeoD6@gmail.com">Email me</a>
+        </div>
+      </div>
+      <figure class="polaroid">
+        <span class="tape" aria-hidden="true"></span>
+        <img src="images/campus.png" alt="My campus">
+        <figcaption>where the work happens</figcaption>
+      </figure>
+    </div>
+  </header>
+
+  <!-- ABOUT -->
+  <section class="block" id="about">
+    <div class="wrap">
+      <div class="title"><h2>About me</h2><span class="note">the short version</span></div>
+      <div class="paper about">
+        <div>
+          <p>I'm Avery. I'm in the final year of a degree in Software Design with Artificial Intelligence for Cloud Computing, where I've built a foundation in programming, databases, machine learning and web development.</p>
+          <p>During my placement I worked in a four-person team on a cloud-ready MRI quality-assurance system, where I turned manual ACR phantom tests into Python image-processing algorithms. That project showed me how much I enjoy the point where data, algorithms and real users meet — and it's the kind of work I want to keep doing.</p>
+        </div>
+        <ul class="facts">
+          <li><span>Degree</span><span>Software Design with AI for Cloud Computing</span></li>
+          <li><span>Year</span><span>Final year</span></li>
+          <li><span>Placement</span><span>MRI ACR QA Pipeline (team of 4)</span></li>
+          <li><span>Looking for</span><span>Graduate software, data or cloud roles</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="block" id="skills">
+    <div class="wrap">
+      <div class="title"><h2>Skills</h2><span class="note">what I bring</span></div>
+      <div class="skill-groups">
+        <div><h3>Languages</h3><ul class="chips"><li>Python</li><li>Java</li><li>SQL</li><li>JavaScript</li><li>HTML &amp; CSS</li></ul></div>
+        <div><h3>Data &amp; AI</h3><ul class="chips"><li>pandas</li><li>NumPy</li><li>scikit-learn</li><li>Data Visualisation</li><li>Data Mining</li><li>Machine Learning</li><li>Image Processing</li></ul></div>
+        <div><h3>Web, Cloud &amp; Tools</h3><ul class="chips"><li>Flask</li><li>pytest</li><li>Docker</li><li>AWS</li><li>Git</li></ul></div>
+      </div>
+      <div class="notes">
+        <div class="sticky"><h3>Problem solving</h3><p>Turned manual MRI phantom tests into repeatable algorithms — finding the right images, measuring them and deciding PASS or FAIL.</p></div>
+        <div class="sticky"><h3>Teamwork</h3><p>Built a shared codebase with three teammates using branches, reviews and regular supervisor check-ins.</p></div>
+        <div class="sticky"><h3>Always learning</h3><p>Picked up medical imaging and DICOM from scratch during my placement to deliver the QA modules.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="block" id="projects">
+    <div class="wrap">
+      <div class="title"><h2>Projects</h2><span class="note">things I've built</span></div>
+      <div class="projects">
+
+        <article class="card featured">
+          <div class="shot fit"><img src="images/mri/card.png" alt="MRI QA Cloud welcome panel: ACR phantom quality assurance — upload DICOM ZIP files, run automated QA checks and export pass/fail reports"></div>
+          <div class="card-body">
+            <span class="label">Featured · Placement team project</span>
+            <h3>MRI ACR QA Pipeline</h3>
+            <p>A cloud-ready web app that automates MRI scanner quality checks. I built the image-processing algorithms behind its six ACR QA tests and the dashboard that shows their PASS/FAIL results — backed by 34 automated tests.</p>
+            <ul class="ctags"><li>Python</li><li>NumPy</li><li>pydicom</li><li>Flask</li><li>Docker</li><li>AWS</li></ul>
+            <div class="links"><a href="mri-qa.html">Read the case study →</a></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="shot contain"><img src="images/data-mining/model1_vs_model2.png" alt="Chart of actual vs predicted hourly bike demand"></div>
+          <div class="card-body">
+            <span class="label">Business analytics · Regression</span>
+            <h3>Forecasting Bike-Share Demand in Seoul</h3>
+            <p>A linear regression that explains two-thirds of hourly bike rentals (R² 0.66), turned into redistribution, maintenance and staffing recommendations for a bike-share operator.</p>
+            <ul class="ctags"><li>Python</li><li>scikit-learn</li><li>Regression</li><li>Demand Forecasting</li></ul>
+            <div class="links"><a href="bike-demand.html">Read the report →</a></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="shot contain"><img src="images/data-mining/dt_coupon_type.png" alt="Bar chart of coupon acceptance rate by coupon type"></div>
+          <div class="card-body">
+            <span class="label">Business analytics · Classification</span>
+            <h3>Targeting In-Car Coupons</h3>
+            <p>A tuned decision tree (70.6% accuracy) that predicts which drivers will use a coupon — targeting with it would lift acceptance from 57% to 73% while sending about 40% fewer coupons.</p>
+            <ul class="ctags"><li>Python</li><li>scikit-learn</li><li>Decision Trees</li><li>Customer Targeting</li></ul>
+            <div class="links"><a href="coupon-targeting.html">Read the report →</a></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="shot"><img src="images/cafe/home-card.jpg" alt="Island Brew Café welcome screen"></div>
+          <div class="card-body">
+            <span class="label">Web development · Front-end</span>
+            <h3>Island Brew Café</h3>
+            <p>An interactive café ordering website: browse 33 menu items, build an order with a live total, choose eat-in or takeaway and get a receipt — built with plain HTML, CSS and JavaScript.</p>
+            <ul class="ctags"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>Responsive Design</li></ul>
+            <div class="links"><a href="cafe/index.html" target="_blank" rel="noopener">Live site ↗</a><a href="cafe.html">How I built it →</a></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="shot"><img src="images/calc/card.png" alt="BMI calculator, loan calculator and maths quiz side by side"></div>
+          <div class="card-body">
+            <span class="label">Web development · Year 1</span>
+            <h3>Interactive Web Calculators</h3>
+            <p>My first JavaScript project: a BMI calculator, a loan repayment calculator and a maths quiz on one page — plus a look back at what I'd improve now.</p>
+            <ul class="ctags"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
+            <div class="links"><a href="calculators/index.html" target="_blank" rel="noopener">Try it ↗</a><a href="calculators.html">Details →</a></div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="block" id="experience">
+    <div class="wrap">
+      <div class="title"><h2>Education &amp; experience</h2></div>
+      <ul class="paper edu">
+        <li>
+          <span class="when">Now · final year</span>
+          <div>
+            <h3>Software Design with Artificial Intelligence for Cloud Computing</h3>
+            <p>Programming, databases, data mining, machine learning, web development and cloud computing.</p>
+          </div>
+        </li>
+        <li>
+          <span class="when">2025 – 2026</span>
+          <div>
+            <h3>Placement · MRI ACR QA Pipeline</h3>
+            <p>Four-person team building a cloud-ready MRI quality-assurance web app. I developed the QA image-processing algorithms (Python, NumPy, pydicom) and the dashboard pages that present their results.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <span class="hi">let's chat!</span>
+    <h2>Open to graduate roles — <span class="mark">get in touch</span>.</h2>
+    <div class="btns">
+      <a class="btn solid" href="mailto:OETeoD6@gmail.com">OETeoD6@gmail.com</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>© <span id="yr"></span> Chenrui (Avery) Xie · Hero photo by JESHOOTS.COM on Unsplash</footer>
+<script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
+</body>
+</html>

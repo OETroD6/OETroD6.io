@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Targeting In-Car Coupons | Chenrui (Avery) Xie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/case-study.css">
+</head>
+<body>
+
+<nav aria-label="Main">
+  <div class="wrap">
+    <a href="index.html" class="logo">Avery Xie</a>
+    <a href="index.html#projects" class="back">← Back to projects</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <header class="top">
+    <span class="hand">business analytics · classification</span>
+    <h1>Targeting in-car coupons with a decision tree</h1>
+    <p class="intro">Which drivers will actually use a coupon? I built a decision tree on 12,000+ survey responses to predict coupon acceptance, then turned it into a targeting strategy for a navigation app or local business.</p>
+    <ul class="tags">
+      <li>Python</li><li>pandas</li><li>scikit-learn</li><li>Decision Trees</li><li>GridSearchCV</li><li>Customer Targeting</li>
+    </ul>
+    <div class="btns">
+      <a class="btn solid" href="https://archive.ics.uci.edu/dataset/603/in+vehicle+coupon+recommendation" target="_blank" rel="noopener">Dataset (UCI) ↗</a>
+    </div>
+  </header>
+
+  <!-- EXECUTIVE SUMMARY -->
+  <section class="exec" aria-labelledby="exec-h">
+    <span class="eyebrow" id="exec-h">Executive summary</span>
+    <p class="headline">Sending coupons only to drivers the model picks would raise the acceptance rate from 57% to 73%, while still reaching about three-quarters of interested drivers.</p>
+    <ul>
+      <li>The tuned decision tree is <b>70.6% accurate</b>, 14 points above the “send to everyone” baseline of 56.8%.</li>
+      <li><b>Coupon type</b> and <b>past habits</b> matter most: carry-out and cheap-restaurant coupons are popular, bar and expensive-restaurant coupons are not.</li>
+      <li>On the test set, the model would send <b>about 40% fewer coupons</b> and still reach <b>77%</b> of drivers who would accept.</li>
+      <li>Recommendation: pilot model-based targeting with an A/B test, and refocus low-performing offers on regular customers.</li>
+    </ul>
+  </section>
+
+  <div class="kpis">
+    <div class="kpi"><b>57% → 73%</b><span>acceptance rate of coupons sent</span></div>
+    <div class="kpi"><b>≈40%</b><span>fewer coupons sent</span></div>
+    <div class="kpi"><b>77%</b><span>of interested drivers still reached</span></div>
+    <div class="kpi"><b>70.6%</b><span>test accuracy (baseline 56.8%)</span></div>
+  </div>
+
+  <!-- ============ PART A: ANALYSIS ============ -->
+  <div class="part"><span class="pill">Part A · The analysis</span></div>
+  <h2>What the data says</h2>
+  <p class="sub">12,684 survey responses → 12,610 after cleaning · target: accept (1) or reject (0)</p>
+
+  <div class="stack">
+    <div class="paper">
+      <h3>Data &amp; preparation</h3>
+      <ul>
+        <li>Source: In-Vehicle Coupon Recommendation (UCI). Drivers were shown a coupon in a driving scenario and asked if they would accept it.</li>
+        <li>Dropped one column that was 99% empty and one with the same value in every row; removed 74 duplicates; filled the few missing visit-frequency answers (1–2%) with the most common value.</li>
+        <li>Classes are fairly balanced: 56.8% accepted.</li>
+      </ul>
+    </div>
+
+    <div class="figs">
+      <figure><span class="tape" aria-hidden="true"></span><img src="images/data-mining/dt_coupon_type.png" alt="Acceptance rate by coupon type: carry-out and cheap restaurants highest, bars lowest"><figcaption>carry-out wins, bars lose</figcaption></figure>
+      <figure><span class="tape" aria-hidden="true"></span><img src="images/data-mining/dt_coffee_freq.png" alt="Coffee coupon acceptance by how often the driver visits coffee houses"><figcaption>habits predict acceptance</figcaption></figure>
+    </div>
+
+    <div class="paper">
+      <h3>What drives acceptance</h3>
+      <table>
+        <thead><tr><th>Segment</th><th>Acceptance rate</th></tr></thead>
+        <tbody>
+          <tr><td>Carry-out &amp; takeaway coupons</td><td class="num">73%</td></tr>
+          <tr><td>Cheap restaurant (&lt;$20) coupons</td><td class="num">71%</td></tr>
+          <tr><td>Expensive restaurant ($20–50) coupons</td><td class="num">44%</td></tr>
+          <tr><td>Bar coupons</td><td class="num">41%</td></tr>
+          <tr><td>Coffee coupon · never visits coffee houses</td><td class="num">19%</td></tr>
+          <tr><td>Coffee coupon · regular coffee-house visitor</td><td class="num">65–69%</td></tr>
+          <tr><td>Coupon valid for 1 day vs 2 hours</td><td class="num">62% vs 50%</td></tr>
+          <tr><td>Driving with friends</td><td class="num">67%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="paper">
+      <h3>Modelling approach</h3>
+      <p>An unrestricted tree memorised the training data (99.8% train vs 69.5% test accuracy). To fix this I tuned the tree's depth and minimum leaf size with 5-fold GridSearchCV across 24 combinations. Accuracy peaked at depth 8 (CV 70.1%) and fell for deeper trees.</p>
+      <p>On the held-out test set the final tree reached <b>70.6%</b> accuracy, with precision 0.73 and recall 0.77 for “accept”.</p>
+    </div>
+
+    <div class="figs">
+      <figure><span class="tape" aria-hidden="true"></span><img src="images/data-mining/dt_importance.png" alt="Top 10 feature importances, led by coupon type and coffee-house visits"><figcaption>coupon type &amp; habits matter most</figcaption></figure>
+      <figure><span class="tape" aria-hidden="true"></span><img src="images/data-mining/dt_confusion.png" alt="Confusion matrix: 684 true rejects, 407 false accepts, 334 missed accepts, 1097 true accepts"><figcaption>1,097 hits · 407 wasted · 334 missed</figcaption></figure>
+    </div>
+  </div>
+
+  <!-- ============ PART B: BUSINESS ============ -->
+  <div class="part biz"><span class="pill">Part B · Business implications</span></div>
+  <h2>How a business should use it</h2>
+  <p class="sub">Turning the model into a coupon-targeting strategy</p>
+
+  <div class="recs">
+    <div class="rec"><div>
+      <h3>Target coupons instead of sending them to everyone</h3>
+      <p>Only send a coupon when the model predicts the driver will accept. Fewer coupons go out, fewer drivers get irrelevant offers, and a much higher share are used.</p>
+      <p class="why"><b>Evidence:</b> of 2,522 test drivers, the model picked 1,504 (≈60%); 73% of them accepted, vs 57% overall. It reached 1,097 of the 1,431 drivers who would accept (77%).</p>
+    </div></div>
+
+    <div class="rec"><div>
+      <h3>Lead with carry-out and cheap-restaurant offers</h3>
+      <p>These are the easiest wins and should make up most of the campaign volume.</p>
+      <p class="why"><b>Evidence:</b> 73% and 71% acceptance, and coupon type is the model's strongest factor.</p>
+    </div></div>
+
+    <div class="rec"><div>
+      <h3>Send bar and coffee coupons only to existing customers</h3>
+      <p>Low-performing categories work much better when they go to people who already visit those places.</p>
+      <p class="why"><b>Evidence:</b> only 19% of non-coffee-drinkers accept a coffee coupon vs 65–69% of regulars; “never visits bars” is a top-6 factor; bar coupons overall get 41%.</p>
+    </div></div>
+
+    <div class="rec"><div>
+      <h3>Design the offer for convenience</h3>
+      <p>Give coupons a full day to use rather than two hours, prioritise venues that are close by, and favour moments when drivers have friends in the car.</p>
+      <p class="why"><b>Evidence:</b> 62% acceptance for 1-day vs 50% for 2-hour coupons; 67% with friends; “venue 25+ minutes away” is a top-4 factor.</p>
+    </div></div>
+  </div>
+
+  <div class="two" style="margin-top:28px">
+    <div class="box p">
+      <h3>The trade-off to manage</h3>
+      <p>The model makes two kinds of mistakes: <b>407 wasted coupons</b> (sent to drivers who reject) and <b>334 missed customers</b> (not sent to drivers who would accept). If coupons are cheap, the business can lower the threshold to reach more customers; if they're costly, raise it to waste fewer.</p>
+    </div>
+    <div class="box b">
+      <h3>Risks &amp; next steps</h3>
+      <ul>
+        <li>The data is survey answers to hypothetical scenarios, so validate with a real A/B test before full rollout.</li>
+        <li>About 30% of predictions are still wrong; an ensemble such as a random forest could improve accuracy.</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="note">All figures come from my analysis of the UCI In-Vehicle Coupon Recommendation dataset. “≈40% fewer coupons” and “77% reached” are calculated from the test-set confusion matrix: (1,097 + 407) ÷ 2,522 ≈ 60% sent; 1,097 ÷ 1,431 ≈ 77%.</p>
+
+</main>
+
+<footer><a href="index.html#projects">← Back to all projects</a></footer>
+</body>
+</html>

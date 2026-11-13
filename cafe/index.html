@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Island Brew Café</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="bg" id="bg"></div>
+
+<!-- HOME -->
+<section class="view active" id="home">
+  <div class="home-card">
+    <span class="tag">Open 24/7</span>
+    <h1>Island Brew Café</h1>
+    <p>Fresh coffee, light bites &amp; sweet treats</p>
+    <button class="btn" id="enterBtn">Come on in</button>
+  </div>
+</section>
+
+<!-- LOADING -->
+<section class="view" id="loading">
+  <div class="load-msg" id="loadMsg">Grinding the beans…</div>
+  <div class="bar"><i id="loadBar"></i></div>
+  <div class="load-pct" id="loadPct">0%</div>
+</section>
+
+<!-- MENU HUB -->
+<section class="view page" id="menu">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span>Island Brew Café</div>
+    <button class="back" data-go="home">← Leave</button>
+  </div>
+  <div class="panel">
+    <div class="panel-head">
+      <h2>What would you like?</h2>
+      <p>Pick a menu to start your order.</p>
+    </div>
+    <div class="cats" id="cats"></div>
+  </div>
+</section>
+
+<!-- CATEGORY -->
+<section class="view page" id="category">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span>Island Brew Café</div>
+    <button class="back" data-go="menu">← Menu</button>
+  </div>
+  <div class="panel">
+    <div class="panel-head">
+      <h2 id="catTitle"></h2>
+      <p id="catSub"></p>
+    </div>
+    <div class="items" id="items"></div>
+  </div>
+</section>
+
+<!-- CHECKOUT -->
+<section class="view page" id="checkout">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span>Island Brew Café</div>
+    <button class="back" data-go="menu">← Keep ordering</button>
+  </div>
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Your order</h2>
+      <p id="coCount"></p>
+    </div>
+    <div id="coBody"></div>
+  </div>
+</section>
+
+<!-- PAID -->
+<section class="view" id="paid">
+  <div class="receipt">
+    <div class="tick"><svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <h2>Payment complete!</h2>
+    <p class="sub">Thanks for stopping by. Your order is on its way.</p>
+    <div class="ticket" id="ticket"></div>
+    <p class="sub" style="margin:0 0 4px">Order number</p>
+    <div class="orderno" id="orderNo"></div>
+    <div style="margin-top:22px"><button class="btn" id="newOrder">Start a new order</button></div>
+  </div>
+</section>
+
+<!-- cart bar -->
+<div class="cartbar" id="cartbar">
+  <div class="sum"><span id="cbTotal">0 Bells</span><small id="cbCount">0 items</small></div>
+  <button class="btn" data-go="checkout">View order →</button>
+</div>
+
+<div class="paying" id="paying"><div><span class="spin"></span>Paying with Bells…</div></div>
+
+<footer class="credit">Student project · Images © Nintendo, via Nookipedia</footer>
+
+<script src="js/menu-data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
